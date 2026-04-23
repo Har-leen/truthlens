@@ -4,7 +4,8 @@ from utils.analysis_db import save_analysis, publish_analysis
 
 
 def show():
-    st.title(" Analyze News Article")
+    st.markdown("## 🧠 Analyze News Article")
+    st.caption("Detect whether a news article is fake or real using AI")
     user = st.session_state["user"]
 
     st.markdown("Paste a news article or upload a `.txt` file below.")
