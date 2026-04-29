@@ -14,7 +14,7 @@ def show():
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         with st.form("login_form"):
-            username = st.text_input("Username")
+            username = st.text_input("Username",placeholder="username")
             email    = st.text_input("Email", placeholder="example@domain.com")
             password = st.text_input("Password", type="password")
             submitted = st.form_submit_button("Login", use_container_width=True)

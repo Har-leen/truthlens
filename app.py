@@ -2,9 +2,20 @@ import streamlit as st
 
 st.set_page_config(
     page_title="TruthLens",
+    page_icon="assets/logo.png", 
     layout="wide",
     initial_sidebar_state="expanded"
 )
+col1, col2 = st.columns([1, 5])
+
+with col1:
+    st.image("assets/logo.png", width=80)
+
+# with col2:
+    # st.title("TruthLens")
+
+st.sidebar.image("assets/logo.png", width=120)
+# st.sidebar.title("TruthLens")
 
 from utils.auth import init_session
 from views import home, analyze, community, history, admin, login, register
