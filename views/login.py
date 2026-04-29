@@ -25,11 +25,18 @@ def show():
             elif not is_valid_email(email):
                 st.error("Please enter a valid email address (e.g. abc@example.com).")
             else:
-                ok, result = login_user(username, password)
-                if ok:
-                    st.session_state["logged_in"] = True
-                    st.session_state["user"] = result
-                    st.success(f"Welcome back, {result['username']}!")
-                    st.rerun()
-                else:
-                    st.error(result)
+                try:
+                    ok, result = login_user(username,password)
+
+                    if ok:
+                         st.success("Login successful")
+                         st.session_state["logged_in"] = True
+                         st.session_state["username"] = username
+                         st.rerun()
+                    else:
+                        st.error(result)
+                except ConnectionError:
+                    st.error("Database connection failed. Please try again later")
+                
+                except Exception as e:
+                    st.error("Something went wrong. Please try again.")
