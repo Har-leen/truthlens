@@ -2,9 +2,11 @@ import streamlit as st
 from ml.predictor import predict
 from utils.analysis_db import save_analysis, publish_analysis
 
+MIN_WORDS = 30  # minimum words for reliable prediction
 
 def show():
-    st.title(" Analyze News Article")
+    st.markdown("## 🧠 Analyze News Article")
+    st.caption("Detect whether a news article is fake or real using AI")
     user = st.session_state["user"]
 
     st.markdown("Paste a news article or upload a `.txt` file below.")
@@ -33,6 +35,18 @@ def show():
         if not text.strip():
             st.warning("Please provide some text to analyze.")
             return
+
+        # ── Short text warning ──────────────────────────────────────────────
+        word_count = len(text.strip().split())
+        if word_count < MIN_WORDS:
+            st.warning(
+                f"⚠️ Your text is only **{word_count} word(s)** long. "
+                f"For reliable results, please paste at least **{MIN_WORDS} words** "
+                f"(a full news article or paragraph). "
+                f"Short text often produces inaccurate predictions."
+            )
+            return
+        # ───────────────────────────────────────────────────────────────────
 
         with st.spinner("Analyzing article …"):
             try:
@@ -63,6 +77,14 @@ def show():
         col3, col4 = st.columns(2)
         col3.metric(" Fake Probability", f"{fake_prob*100:.1f}%")
         col4.metric(" Real Probability", f"{real_prob*100:.1f}%")
+
+        # ── Low confidence disclaimer ───────────────────────────────────────
+        if confidence < 0.75:
+            st.info(
+                "ℹ️ The model's confidence is relatively low. "
+                "Consider providing more text for a more accurate result."
+            )
+        # ───────────────────────────────────────────────────────────────────
 
         snippet = text[:300] + ("…" if len(text) > 300 else "")
         analysis_id = save_analysis(

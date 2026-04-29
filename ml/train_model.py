@@ -25,6 +25,8 @@ from sklearn.pipeline import Pipeline
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "model.pkl")
 DATA_PATH  = os.path.join(os.path.dirname(__file__), "..", "fake_news_dataset.csv")
 
+MIN_WORDS = 30  # drop articles shorter than this to avoid style bias
+
 
 def clean_text(text: str) -> str:
     """Basic text cleaning."""
@@ -40,6 +42,16 @@ def clean_text(text: str) -> str:
 def load_data(path: str) -> pd.DataFrame:
     df = pd.read_csv(path)
     df = df.dropna(subset=["text", "label"])
+
+    # ── Filter out very short articles ─────────────────────────────────────
+    # Short text skews the model to label brief inputs as FAKE,
+    # because real news in most datasets is long formal journalism.
+    before = len(df)
+    df = df[df["text"].str.split().str.len() >= MIN_WORDS]
+    after = len(df)
+    print(f"  Removed {before - after} rows with fewer than {MIN_WORDS} words.")
+    # ───────────────────────────────────────────────────────────────────────
+
     df["combined"] = (
         df["title"].fillna("").astype(str) + " " + df["text"].astype(str)
     )

@@ -23,7 +23,7 @@ ADMIN_PAGES = {
 }
 
 with st.sidebar:
-    st.image("https://img.icons8.com/fluency/96/news.png", width=80)
+    # st.image("https://img.icons8.com/fluency/96/news.png", width=80)
     st.title("TruthLens")
     st.caption("AI-Powered Fake News Detector")
     st.divider()

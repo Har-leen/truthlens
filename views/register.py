@@ -1,5 +1,12 @@
+import re
 import streamlit as st
 from utils.auth import register_user
+
+
+def is_valid_email(email: str) -> bool:
+    """Check email has format: something@something.something"""
+    pattern = r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
 
 
 def show():
@@ -8,7 +15,7 @@ def show():
     with col2:
         with st.form("register_form"):
             username = st.text_input("Username")
-            email    = st.text_input("Email")
+            email    = st.text_input("Email", placeholder="example@domain.com")
             password = st.text_input("Password", type="password")
             confirm  = st.text_input("Confirm Password", type="password")
             submitted = st.form_submit_button("Register", use_container_width=True)
@@ -16,6 +23,8 @@ def show():
         if submitted:
             if not username or not email or not password:
                 st.error("Please fill in all fields.")
+            elif not is_valid_email(email):
+                st.error("Please enter a valid email address (e.g. abc@example.com).")
             elif password != confirm:
                 st.error("Passwords do not match.")
             elif len(password) < 6:
