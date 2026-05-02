@@ -14,7 +14,7 @@ def init_session():
         st.session_state["user"] = None
 
 
-def register_user(username: str, email: str, password: str, role: str = "user") -> tuple[bool, str]:
+def register_user(username: str, email: str, password: str, role: str = "user"):
     conn = get_connection()
     cur = conn.cursor()
     try:
@@ -31,7 +31,7 @@ def register_user(username: str, email: str, password: str, role: str = "user") 
         conn.close()
 
 
-def login_user(username: str, password: str) -> tuple[bool, dict | str]:
+def login_user(username: str, password: str):
     conn = get_connection()
     cur = conn.cursor(dictionary=True)
     try:
