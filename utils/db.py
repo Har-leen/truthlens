@@ -47,7 +47,7 @@ def init_db():
             email       VARCHAR(150) UNIQUE NOT NULL,
             password    VARCHAR(256) NOT NULL,
             role        ENUM('user','admin') DEFAULT 'user',
-            created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
@@ -61,7 +61,7 @@ def init_db():
             prediction      ENUM('FAKE','REAL') NOT NULL,
             confidence      FLOAT NOT NULL,
             is_public       TINYINT(1) DEFAULT 0,
-            created_at      DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         )
     """)
@@ -72,7 +72,7 @@ def init_db():
             analysis_id INT NOT NULL,
             user_id     INT NOT NULL,
             vote        ENUM('up','down') NOT NULL,
-            created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             UNIQUE KEY unique_vote (analysis_id, user_id),
             FOREIGN KEY (analysis_id) REFERENCES analyses(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id)     REFERENCES users(id)    ON DELETE CASCADE
@@ -85,7 +85,7 @@ def init_db():
             analysis_id INT NOT NULL,
             user_id     INT NOT NULL,
             content     TEXT NOT NULL,
-            created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+            created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (analysis_id) REFERENCES analyses(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id)     REFERENCES users(id)    ON DELETE CASCADE
         )
