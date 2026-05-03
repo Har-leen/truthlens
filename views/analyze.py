@@ -96,13 +96,18 @@ def show():
             confidence=confidence,
             is_public=False,
         )
-
+        # Save to session state so publish button can access it
+        st.session_state["last_analysis_id"] = analysis_id
+        st.session_state["last_prediction"] = prediction
         st.success("Result saved to your history.")
 
-        if prediction == "FAKE":
-            st.divider()
-            st.markdown("####  Share for Community Review")
-            st.caption("Allow other users to upvote/downvote and discuss this result (anonymized).")
-            if st.button(" Publish for Public Review"):
-                publish_analysis(analysis_id)
-                st.success("Published! Other users can now review it in the Community tab.")
+    # Publish button OUTSIDE the Analyze button block
+    if st.session_state.get("last_prediction") == "FAKE" and st.session_state.get("last_analysis_id"):
+        st.divider()
+        st.markdown("#### 📢 Share for Community Review")
+        st.caption("Allow other users to upvote/downvote and discuss this result.")
+        if st.button("🌐 Publish for Public Review"):
+            publish_analysis(st.session_state["last_analysis_id"])
+            st.success("Published! Other users can now review it in the Community tab.")
+            st.session_state["last_analysis_id"] = None
+            st.session_state["last_prediction"] = None
