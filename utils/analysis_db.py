@@ -42,7 +42,8 @@ def get_public_analyses(limit=50):
            JOIN users u ON a.user_id = u.id
            LEFT JOIN votes v ON v.analysis_id = a.id
            WHERE a.is_public = 1
-           GROUP BY a.id, u.username
+           GROUP BY a.id, u.username, a.title, a.text_snippet, a.full_text,
+                    a.prediction, a.confidence, a.is_public, a.created_at
            ORDER BY a.created_at DESC
            LIMIT %s""",
         (limit,),
@@ -51,7 +52,6 @@ def get_public_analyses(limit=50):
     cur.close()
     conn.close()
     return rows
-
 
 def get_analysis_by_id(analysis_id):
     conn = get_connection()
